@@ -1,0 +1,6 @@
+ul#users(type="none")
+  - each user in users
+    - if (user.name)
+      li
+        a(href="/user/#{ user.name }")
+          b #{ user.name } 

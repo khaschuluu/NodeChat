@@ -1,0 +1,32 @@
+h1= title
+
+script(src='/socket.io/socket.io.js')
+script(type='text/javascript')
+  var ip = 'localhost';
+  var socket = io.connect('http://' + ip + ':3000/room');
+
+  socket.on('msg', function (msg) {
+    document.getElementById('msgs').innerHTML += msg + '<br />';
+  });
+
+  socket.on('online_users', function (online_users) {
+    document.getElementById('online_users').innerHTML = '';
+    for (name in online_users)
+      document.getElementById('online_users').innerHTML += '<b><a>' + name + '</a></b> ';
+  });
+
+  function send(box) {
+    socket.emit('msg', box.value);
+    box.value = '';
+    document.getElementById('msgs').scrollTop = document.getElementById('msgs').scrollHeight;
+  }
+
+#private_chat
+
+.public_chat
+  #online_users
+  #msgs
+
+.msg_box
+  hr
+  input(type='text', id='msg', name='msg', onKeyDown='if (event.keyCode == 13) send(this)')

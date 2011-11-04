@@ -1,0 +1,23 @@
+!!!
+html
+  head
+    title NodeChat
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    - if (session.user)
+      | Welcome 
+      a(href='/user/#{ session.user.name }')
+        b= session.user.name
+      |  | if you are not, 
+      a(href='/logout') logout
+    - else
+      a(href='/login') Login
+      |  or 
+      a(href='/join') Join
+    - if (flash.info)
+      .info= flash.info
+    - if (flash.warn)
+      .warn= flash.warn
+    - if (flash.error)
+      .error= flash.error
+    != body

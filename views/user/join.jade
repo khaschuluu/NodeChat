@@ -1,0 +1,13 @@
+h1= title
+
+form(action='/join', method='POST')
+  label Name:
+    input(type='text', name='name')
+  br
+  label Password:
+    input(type='password', name='password')
+  br
+  label Password confirmation:
+    input(type='password', name='password_confirmation')
+  br
+  input(type='submit', value='Join')

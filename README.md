@@ -5,8 +5,8 @@ NodeChat чатын төсөлд тавтай морил
 
 Энэ бяцхан төсөл нь Node.JS технологийн судлагааны зорилготой ба вэб апп хийхэд шаардагдах бүхий л практик аргачлалуудыг шингээхийг зорино.
 
-* joyent/node#1 - Сервер дээрх JavaScript орчин
-* User/Project: visionmedia/express - Node.js суурилсан вэб аппликэйшн фрэймворк
+* joyent/node - Сервер дээрх JavaScript орчин
+* visionmedia/express - Node.js суурилсан вэб аппликэйшн фрэймворк
 * cloudhead/less.js - CSS динамик хэл
 * visionmedia/jade - HTML динамик хэл
 * learnboost/socket.io - Сервер, клиент real-time холболтын орчин

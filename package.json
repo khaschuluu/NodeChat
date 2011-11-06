@@ -4,7 +4,9 @@
   , "private": true
   , "dependencies": {
       "express": "2.4.7"
-    , "sass": ">= 0.0.1"
+    , "less": ">= 0.0.4"
+    , "socket.io": ">= 0.8.6"
+    , "mongodb": ">= 0.9.6-23"
     , "jade": ">= 0.0.1"
   }
 }

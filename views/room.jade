@@ -15,10 +15,10 @@ script(type='text/javascript')
       document.getElementById('online_users').innerHTML += '<b><a>' + name + '</a></b> ';
   });
 
-  function send(box) {
-    socket.emit('msg', box.value);
+  function send(name, box) {
+    socket.emit('msg', { to: name, msg: box.value });
     box.value = '';
-    document.getElementById('msgs').scrollTop = document.getElementById('msgs').scrollHeight;
+    box.scrollTop = box.scrollHeight;
   }
 
 #private_chat
@@ -29,4 +29,4 @@ script(type='text/javascript')
 
 .msg_box
   hr
-  input(type='text', id='msg', name='msg', onKeyDown='if (event.keyCode == 13) send(this)')
+  input(type='text', id='msg', name='msg', onKeyDown='if (event.keyCode == 13) send(null, this)')

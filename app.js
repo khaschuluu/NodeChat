@@ -67,20 +67,24 @@ var public_room = io.of('/room').on('connection', function (socket) {
     if (!connections[name]) {
       connections[name] = { sockets: {} };
       online_users[name] = true;
+
+      public_room.emit('online_users', online_users);
+      public_room.emit('msg', '<b>' + name + '</b> is joined');
+    } else {
+      socket.emit('online_users', online_users);
+      socket.emit('msg', '<b>' + name + '</b> is joined');
     }
+
     connections[name].sockets[socket.id] = socket;
-
-    public_room.emit('online_users', online_users);
-    public_room.emit('msg', '<b>' + name + '</b> is joined');
   });
 
-  socket.on('msg', function (msg) {
+  socket.on('msg', function (data) {
     socket.get('name', function (err, name) {
-      public_room.emit('msg', '<b>' + name + '</b>: ' + msg);
+      if (data.name)
+      	public_room.emit('msg', '<b>' + name + '</b>: ' + data.msg);
+      else
+      	public_room.emit('msg', '<b>' + name + '</b>: ' + data.msg);
     });
-  });
-
-  socket.on('pmsg', function (name, msg) {
   });
 
   // remove and share disconnected user
@@ -90,10 +94,13 @@ var public_room = io.of('/room').on('connection', function (socket) {
       if (is_empthy_obj(connections[name].sockets)) {
         delete connections[name];
         delete online_users[name];
-      }
 
-      public_room.emit('online_users', online_users);
-      public_room.emit('msg', '<b>' + name + '</b> is left');
+        public_room.emit('online_users', online_users);
+        public_room.emit('msg', '<b>' + name + '</b> is left');
+      } else {
+        socket.emit('online_users', online_users);
+        socket.emit('msg', '<b>' + name + '</b> is joined');
+      }
     });
   });
 });

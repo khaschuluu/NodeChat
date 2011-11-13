@@ -5,14 +5,19 @@ script(type='text/javascript')
   var ip = 'localhost';
   var socket = io.connect('http://' + ip + ':3000/room');
 
-  socket.on('msg', function (msg) {
-    document.getElementById('msgs').innerHTML += msg + '<br />';
+  socket.on('msg', function (args) {
+    if (args.to) {
+      from = create_private_window(args.to);
+      document.getElementById('pmsgs_' + args.to).innerHTML += args.msg + '<br />';
+    } else {
+      document.getElementById('msgs').innerHTML += args.msg + '<br />';
+    }
   });
 
   socket.on('online_users', function (online_users) {
     document.getElementById('online_users').innerHTML = '';
     for (name in online_users)
-      document.getElementById('online_users').innerHTML += '<b><a>' + name + '</a></b> ';
+      document.getElementById('online_users').innerHTML += '<b><a onClick="create_private_window(&#39;' + name + '&#39;)">' + name + '</a></b> ';
   });
 
   function send(name, box) {
@@ -21,10 +26,27 @@ script(type='text/javascript')
     box.scrollTop = box.scrollHeight;
   }
 
-  function create_window(name) {
+  function create_private_window(name) {
+    private_chat_container = document.getElementById('private_chat_container');
+    if (document.getElementById('private_' + name))
+      return document.getElementById('private_' + name);
+    else {
+      new_div = document.createElement('div');
+      new_div.setAttribute('id', 'private_' + name);
+      new_div.setAttribute('class', 'private_chat');
+      new_div.innerHTML = "<a onClick='remove_private_window(&#39;" + name + "&#39;)'>x</a>";
+      new_div.innerHTML += "<div id='pmsgs_" + name + "'></div>";
+      new_div.innerHTML += "<input type='text' name='pmsg' onKeyDown='if (event.keyCode == 13) send(&#39;" + name + "&#39;, this)' />";
+      private_chat_container.appendChild(new_div);
+      return new_div;
+    }
   }
 
-#private_chat
+  function remove_private_window(name) {
+    private_chat_container = document.getElementById('private_chat_container');
+    if (document.getElementById('private_' + name))
+      private_chat_container.removeChild(document.getElementById('private_' + name));
+  }
 
 .public_chat
   #online_users

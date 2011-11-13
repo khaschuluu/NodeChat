@@ -69,10 +69,10 @@ var public_room = io.of('/room').on('connection', function (socket) {
       online_users[name] = true;
 
       public_room.emit('online_users', online_users);
-      public_room.emit('msg', '<b>' + name + '</b> is joined');
+      public_room.emit('msg', { to: null, msg: '<b>' + name + '</b> is joined' } );
     } else {
       socket.emit('online_users', online_users);
-      socket.emit('msg', '<b>' + name + '</b> is joined');
+      socket.emit('msg', { to: null, msg: '<b>' + name + '</b> is joined' } );
     }
 
     connections[name].sockets[socket.id] = socket;
@@ -80,10 +80,13 @@ var public_room = io.of('/room').on('connection', function (socket) {
 
   socket.on('msg', function (data) {
     socket.get('name', function (err, name) {
-      if (data.name)
-      	public_room.emit('msg', '<b>' + name + '</b>: ' + data.msg);
+      if (data.to && connections[data.to])
+        for (user_socket in connections[data.to].sockets) {
+          connections[data.to].sockets[user_socket].emit('msg', { to: name, msg: data.to + ": " + data.msg } );
+          socket.emit('msg', { to: data.to, msg: "me: " + data.msg } );
+        }
       else
-      	public_room.emit('msg', '<b>' + name + '</b>: ' + data.msg);
+        public_room.emit('msg', { to: data.to, msg: '<b>' + name + '</b>: ' + data.msg } );
     });
   });
 
@@ -96,10 +99,10 @@ var public_room = io.of('/room').on('connection', function (socket) {
         delete online_users[name];
 
         public_room.emit('online_users', online_users);
-        public_room.emit('msg', '<b>' + name + '</b> is left');
+        public_room.emit('msg', { to: null, msg: '<b>' + name + '</b> is left' } );
       } else {
         socket.emit('online_users', online_users);
-        socket.emit('msg', '<b>' + name + '</b> is joined');
+        socket.emit('msg', { to: null, msg: '<b>' + name + '</b> is joined' } );
       }
     });
   });
@@ -144,14 +147,19 @@ var current_user = false;
 
 app.post('/login', function (req, res) {
   User.findByName(req.param('name'), function (error, user) {
-    if (!req.session.user && user.password == req.param('password')) {
-      req.session.user = user;
-      current_user = user;
-      req.flash('info', 'Successfully loged in');
+    if (error) {
+      req.flash('error', 'Login is failed');
+      res.redirect('/login');
     } else {
-      req.flash.info('error', 'Login is failed');
+      if (!req.session.user && user.password == req.param('password')) {
+        req.session.user = user;
+        current_user = user;
+        req.flash('info', 'Successfully loged in');
+      } else {
+        req.flash('error', 'Login is failed');
+      }
+      res.redirect('/login');
     }
-    res.redirect('/');
   });
 });
 

@@ -30,6 +30,17 @@ a {
   float: left;
   width: 100%;
 }
+#private_chat_container {
+  position: fixed;
+  bottom: 30px;
+  right: 0px;
+}
+.private_chat {
+  height: 50px;
+  width: 50px;
+  background-color: gray;
+  float: right;
+}
 #msgs {
   overflow: auto;
   height: 300px;

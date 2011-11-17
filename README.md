@@ -15,3 +15,8 @@ NodeChat нээлттэй төсөлд тавтай морил
 * [MongoDB](http://www.mongodb.org) - JavaScript объектоор ажилладаг өгөгдлийн сан удирдах систем
 
 Төслийн дүрст танилцуулга (паржигнасан дууны тухайд уучлаарай :P) - [http://www.youtube.com/watch?v=ywefpIF5-r0](http://www.youtube.com/watch?v=ywefpIF5-r0)
+
+Хөгжүүлэлтэд оролцох
+====================
+
+Хэрвээ та манай бяцхан нээлттэй төслийн хөгжүүлэлтэд оролцох хүсэлтэй бол [Хөгжүүлэлтэд оролцох](khaschuluu/NodeChat/wiki/Хөгжүүлэлтэд-оролцох) [wiki](khaschuluu/NodeChat/wiki) хуудсыг үзнэ үү.

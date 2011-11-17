@@ -146,21 +146,30 @@ app.get('/login', function(req, res) {
 var current_user = false;
 
 app.post('/login', function (req, res) {
-  User.findByName(req.param('name'), function (error, user) {
+try {
+    User.findByName(req.param('name'), function (error, user) {
     if (error) {
       req.flash('error', 'Login is failed');
       res.redirect('/login');
     } else {
-      if (!req.session.user && user.password == req.param('password')) {
+      if (!req.session.user && user && user.password == req.param('password')) {
         req.session.user = user;
         current_user = user;
         req.flash('info', 'Successfully loged in');
       } else {
-        req.flash('error', 'Login is failed');
+	if(!user)
+	        req.flash('error', 'No such user exists');
+	else
+        	req.flash('error', 'Login is failed');
       }
       res.redirect('/login');
     }
   });
+}
+catch (error) {
+    console.log("Error:", error)
+}
+
 });
 
 app.get('/user/:name?', function (req, res) {

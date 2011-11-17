@@ -30,10 +30,10 @@ User.prototype.findAll = function (callback) {
 
 User.prototype.findByName = function (name, callback) {
   this.getCollection( function (error, user_collection) {
-    if (error) callback(error);
+    if (error) callback(error,null);
     else {
       user_collection.findOne({name: name}, function (error, results) {
-        if (error) callback(error);
+        if (error) callback(error,null);
         else callback(null, results);
       });
     }

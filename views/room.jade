@@ -1,4 +1,5 @@
 h1= title
+input(type='hidden', value=session.user.name, id='myname')
 
 script(src='/socket.io/socket.io.js')
 script(type='text/javascript')
@@ -16,8 +17,14 @@ script(type='text/javascript')
 
   socket.on('online_users', function (online_users) {
     document.getElementById('online_users').innerHTML = '';
-    for (name in online_users)
-      document.getElementById('online_users').innerHTML += '<b><a onClick="create_private_window(&#39;' + name + '&#39;)">' + name + '</a></b> ';
+    for (name in online_users){
+      document.getElementById('online_users').innerHTML += '<b>';
+      myname=document.getElementById('myname').value;
+      if(name!=myname)
+      document.getElementById('online_users').innerHTML += '<a onClick="create_private_window(&#39;' + name + '&#39;)">' + name + '</a>';
+      else document.getElementById('online_users').innerHTML += '<a>'+name+'</a>';
+      document.getElementById('online_users').innerHTML += '</b>';
+     }
   });
 
   function send(name, box) {

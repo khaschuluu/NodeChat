@@ -10,7 +10,7 @@ var app = module.exports = express.createServer();
 var io = require('socket.io').listen(app);
 
 var UserModel = require('./user.js').User
-  , User = new UserModel('localhost', 27017);
+  , User = new UserModel('localhost', 27017);//27017
 
 // Configuration
 
@@ -121,17 +121,25 @@ app.get('/join', function (req, res) {
 });
 
 app.post('/join', function (req, res) {
-  if (req.param('password') == req.param('password_confirmation')) {
-    User.save({
-      name: req.param('name'),
-      password: req.param('password')
-    }, function (error, docs) {
-      req.session.user = user;
-      current_user = user;
-      req.flash('info', 'Register is successfully. Now you can login');
-      res.redirect('/');
-    });
-  }
+  User.findByName(req.param('name'), function (error, user) {
+	  if(!req.session.user && user){
+	      req.flash('error', 'Existing user name');
+	      res.redirect('/join');
+	  }  
+  else{
+	  if (req.param('password') == req.param('password_confirmation')) {
+	    User.save({
+	      name: req.param('name'),
+	      password: req.param('password')
+	      }, function (error, docs) {
+		      req.session.user = user;
+		      current_user = user;
+		      req.flash('info', 'Register is successfully. Now you can login');
+		      res.redirect('/');
+	      })
+	  }
+	}
+});
 });
 
 app.get('/login', function(req, res) {

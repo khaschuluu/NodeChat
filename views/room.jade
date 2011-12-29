@@ -6,11 +6,13 @@ script(type='text/javascript')
   var ip = 'localhost';
   var socket = io.connect('http://' + ip + ':3000/room');
 
-  socket.on('msg', function (args) {
-    if (args.to) {
+  socket.on('msg', function (args) {   
+    console.log("Get message on room : From= %s To=%s , Msg=%s",args.from,args.to,args.msg);
+    if (args.to!=null) {
       from = create_private_window(args.to);
       document.getElementById('pmsgs_' + args.to).innerHTML += args.msg + '<br />';
     } else {
+      console.log("It is a public message");
       document.getElementById('msgs').innerHTML += args.msg + '<br />';
     }
   });
@@ -18,26 +20,31 @@ script(type='text/javascript')
   socket.on('online_users', function (online_users) {
     document.getElementById('online_users').innerHTML = '';
     for (name in online_users){
-      document.getElementById('online_users').innerHTML += '<b>';
+      document.getElementById('online_users').innerHTML += '<br>';
       myname=document.getElementById('myname').value;
       if(name!=myname)
       document.getElementById('online_users').innerHTML += '<a onClick="create_private_window(&#39;' + name + '&#39;)">' + name + '</a>';
       else document.getElementById('online_users').innerHTML += '<a>'+name+'</a>';
-      document.getElementById('online_users').innerHTML += '</b>';
+      document.getElementById('online_users').innerHTML += '</br>';
      }
   });
 
   function send(name, box) {
-    socket.emit('msg', { to: name, msg: box.value });
+    console.log('from %s to  %s',document.getElementById('myname').value,name);
+    socket.emit('msg', { from: document.getElementById('myname').value, to: name, msg: box.value });
     box.value = '';
     box.scrollTop = box.scrollHeight;
   }
 
+  //Send private message to name
   function create_private_window(name) {
     private_chat_container = document.getElementById('private_chat_container');
-    if (document.getElementById('private_' + name))
-      return document.getElementById('private_' + name);
-    else {
+    if (document.getElementById('private_' + name)){
+        console.log('returning existing private_chat window of user %s ',name);
+        return document.getElementById('private_' + name);
+    }
+    else if(name!=null) {
+      console.log('creating private_chat window for %s ',name);
       new_div = document.createElement('div');
       new_div.setAttribute('id', 'private_' + name);
       new_div.setAttribute('class', 'private_chat');
@@ -46,9 +53,9 @@ script(type='text/javascript')
       new_div.innerHTML += "<input type='text' name='pmsg' onKeyDown='if (event.keyCode == 13) send(&#39;" + name + "&#39;, this)' />";
       private_chat_container.appendChild(new_div);
       return new_div;
-    }
+     }
   }
-
+  //Close private chat window
   function remove_private_window(name) {
     private_chat_container = document.getElementById('private_chat_container');
     if (document.getElementById('private_' + name))

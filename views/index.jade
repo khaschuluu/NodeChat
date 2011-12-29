@@ -1,3 +1,12 @@
 h1 Welcome to Exchat
 - if (session.user)
   a(href='/room') Chatroom
+  input(type='hidden', value=session.user.name, id='myname')
+
+script(src='/socket.io/socket.io.js')
+script(type='text/javascript')
+  var ip = 'localhost';
+  var socket = io.connect('http://' + ip + ':3000/room');
+  socket.emit('myname', {name: 'Noone'});
+
+

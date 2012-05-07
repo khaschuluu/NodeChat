@@ -1,21 +1,5 @@
-lib-cov
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-
+# we're always using *.less
 *.css
 
-pids
-logs
-results
-
-node_modules/*
-npm-debug.log
-
-.*
+# don't ignore .gitignore
 !.gitignore
-*~

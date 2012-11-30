@@ -1,5 +1,24 @@
-# we're always using *.less
+# for less
 *.css
 
-# don't ignore .gitignore
+# for node
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+
+node_modules
+npm-debug.log
+
+# for linux
+.*
 !.gitignore
+*~

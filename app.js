@@ -29,7 +29,7 @@ app.configure(function(){
         , secret: 'secret'
         , key: 'express.sid'}));
   //app.use(express.session({ secret: 'your secret here' }));
-  app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
+  //app.use(express.compiler({ src: __dirname + '/public', enable: ['less'] }));
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
 });
@@ -44,7 +44,8 @@ app.configure('production', function(){
 
 // Helpers for views -----
 
-app.dynamicHelpers({
+//app.dynamicHelpers({
+app.locals({
   session: function (req, res) {
     return req.session;
   },
@@ -192,7 +193,8 @@ app.get('/join', function (req, res) {
 app.post('/join', function (req, res) {
   User.findByName(req.param('name'), function (error, user) {
 	  if(!req.session.user && user){
-	      req.flash('error', 'Existing user name');
+	      //req.flash('error', 'Existing user name');
+	      //req.flash('error', 'Existing user name');
 	      res.redirect('/join');
 	  }  
   else{
@@ -203,7 +205,7 @@ app.post('/join', function (req, res) {
 	      }, function (error, docs) {
 		      req.session.user = user;
 		      current_user = user;
-		      req.flash('info', 'Register is successfully. Now you can login');
+		      //req.flash('info', 'Register is successfully. Now you can login');
 		      res.redirect('/');
 	      })
 	  }
@@ -226,18 +228,18 @@ app.post('/login', function (req, res) {
 try {
     User.findByName(req.param('name'), function (error, user) {
     if (error) {
-      req.flash('error', 'Login is failed');
+      //req.flash('error', 'Login is failed');
       res.redirect('/login');
     } else {
       if (!req.session.user && user && user.password == req.param('password')) {
         req.session.user = user;        
         current_user = user;
-        req.flash('info', 'Successfully loged in');
-      } else {
-	if(!user)
-	        req.flash('error', 'No such user exists');
-	else
-        	req.flash('error', 'Login is failed');
+        //req.flash('info', 'Successfully loged in');
+    //  } else {
+	//if(!user)
+	//        req.flash('error', 'No such user exists');
+	//else
+    //    	req.flash('error', 'Login is failed');
       }
       res.redirect('/login');
     }
@@ -294,4 +296,4 @@ app.get('/room/:name?', function (req, res) {
 });
 
 app.listen(3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+//console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

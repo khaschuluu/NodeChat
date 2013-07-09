@@ -1,12 +1,12 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "2.4.7"
-    , "less": ">= 0.0.4"
-    , "socket.io": ">= 0.8.6"
-    , "mongodb": ">= 0.9.6-23"
-    , "jade": ">= 0.0.1"
-  }
+    "name": "NodeChat",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "express": "*",
+        "less": "*",
+        "socket.io": "*",
+        "mongodb": "*",
+        "jade": "*"
+    }
 }
